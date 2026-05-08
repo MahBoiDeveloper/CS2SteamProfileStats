@@ -1,0 +1,268 @@
+:root {
+  color-scheme: dark;
+  --bg: #0d0f12;
+  --panel: #171a1f;
+  --panel-strong: #1f242b;
+  --text: #f4f7fb;
+  --muted: #9da8b8;
+  --line: #2a3038;
+  --green: #48d597;
+  --yellow: #f2c76b;
+  --red: #f36f6f;
+  --cyan: #66d4e8;
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  height: 100vh;
+  min-height: 100vh;
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text);
+  background:
+    linear-gradient(135deg, rgba(72, 213, 151, 0.14), transparent 32%),
+    linear-gradient(315deg, rgba(102, 212, 232, 0.1), transparent 34%),
+    var(--bg);
+  overflow: hidden;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.page {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 8px;
+  border: 0;
+  border-radius: 0;
+  background: rgba(23, 26, 31, 0.94);
+  overflow: hidden;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.profile-form {
+  margin: 0 0 8px;
+}
+
+.profile-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  background: #101318;
+  font-size: 16px;
+  font-weight: 750;
+  text-align: center;
+  outline: none;
+}
+
+.profile-input::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+.profile-input:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(72, 213, 151, 0.18);
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 310px 416px 256px;
+  justify-content: space-between;
+  align-items: start;
+  gap: 12px;
+  margin: 0 0 8px;
+}
+
+.tab {
+  height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  background: var(--panel-strong);
+  font-size: 16px;
+  font-weight: 800;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.tab::before {
+  content: "";
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 8px;
+  border-radius: 50%;
+  vertical-align: 1px;
+}
+
+.tab[data-site="csrep"]::before {
+  background: var(--green);
+}
+
+.tab[data-site="leetify"]::before {
+  background: var(--yellow);
+}
+
+.tab[data-site="csst"]::before {
+  background: var(--red);
+}
+
+.tab:hover {
+  border-color: rgba(72, 213, 151, 0.72);
+  transform: translateY(-1px);
+}
+
+.tab:focus-visible {
+  outline: 3px solid rgba(72, 213, 151, 0.28);
+  outline-offset: 2px;
+}
+
+.tab.is-active {
+  border-color: rgba(72, 213, 151, 0.72);
+  background: #242b31;
+}
+
+.site-panel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #0b0d10;
+}
+
+.frame-placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: var(--muted);
+  background: #080a0d;
+  font-size: 34px;
+  font-weight: 750;
+  text-align: center;
+}
+
+.site-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #ffffff;
+}
+
+.site-frame[hidden],
+.frame-placeholder[hidden] {
+  display: none;
+}
+
+.status {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  max-width: min(520px, calc(100% - 28px));
+  min-height: 0;
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(42, 48, 56, 0.9);
+  border-radius: 8px;
+  color: var(--muted);
+  background: rgba(16, 19, 24, 0.92);
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.status.is-error {
+  color: var(--red);
+}
+
+.status.is-ok {
+  color: var(--green);
+}
+
+@media (max-width: 860px) {
+  .tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 560px) {
+  .page {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 6px;
+  }
+
+  .profile-input {
+    height: 44px;
+  }
+
+  .tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+
+  .tab {
+    height: 40px;
+    padding: 0 6px;
+    font-size: 0.84rem;
+  }
+
+  .tab::before {
+    width: 7px;
+    height: 7px;
+    margin-right: 5px;
+  }
+
+  .site-panel {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    margin: 0;
+  }
+
+  .frame-placeholder {
+    font-size: 26px;
+  }
+
+  .status {
+    right: 10px;
+    bottom: 10px;
+    font-size: 0.82rem;
+  }
+}

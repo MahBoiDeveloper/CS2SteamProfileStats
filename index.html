@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CS2 Steam Profile Tabs</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="page">
+      <form class="profile-form" id="profileForm" autocomplete="off">
+        <label class="visually-hidden" for="steamInput">Ссылка на профиль Steam</label>
+        <input
+          class="profile-input"
+          id="steamInput"
+          name="steamInput"
+          type="text"
+          inputmode="url"
+          placeholder="ССЫЛКА НА ПРОФИЛЬ"
+          aria-describedby="statusText"
+        >
+      </form>
+
+      <div class="tabs" role="tablist" aria-label="Сайты для проверки профиля">
+        <button class="tab is-active" id="tab-csrep" type="button" role="tab" aria-selected="true" aria-controls="sitePanel" data-site="csrep">
+          csrep.gg
+        </button>
+        <button class="tab" id="tab-leetify" type="button" role="tab" aria-selected="false" aria-controls="sitePanel" data-site="leetify">
+          leetify.com
+        </button>
+        <button class="tab" id="tab-csst" type="button" role="tab" aria-selected="false" aria-controls="sitePanel" data-site="csst">
+          csst.at
+        </button>
+      </div>
+
+      <section class="site-panel" id="sitePanel" role="tabpanel" aria-labelledby="tab-csrep">
+        <div class="frame-placeholder" id="framePlaceholder">содержимое сайта</div>
+        <iframe
+          class="site-frame"
+          id="siteFrame"
+          title="Встроенный просмотр сайта"
+          referrerpolicy="no-referrer"
+          hidden
+        ></iframe>
+      </section>
+
+      <p class="status" id="statusText" role="status">Введите Steam-профиль и нажмите Enter.</p>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
