@@ -19,7 +19,13 @@
           placeholder="Enter your Steam profile link"
           aria-describedby="statusText"
         >
+        <button class="profile-submit" type="submit">Enter</button>
       </form>
+
+      <section class="profile-history" id="profileHistory" aria-labelledby="historyHeading" hidden>
+        <h2 class="visually-hidden" id="historyHeading">История поиска</h2>
+        <div class="history-list" id="historyList"></div>
+      </section>
 
       <div class="tabs" role="tablist" aria-label="Сайты для проверки профиля">
         <button class="tab" id="tab-leetify" type="button" role="tab" aria-selected="false" aria-controls="sitePanel" data-site="leetify">

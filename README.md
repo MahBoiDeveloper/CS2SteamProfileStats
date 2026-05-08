@@ -7,6 +7,7 @@ A small static HTML/CSS/JS page for quickly opening CS2-related Steam profile st
 ## Features
 
 - Steam profile link input.
+- Local search history with saved Steam profile avatars.
 - Embedded tabs for supported services.
 - Middle mouse button redirects directly to the selected service.
 - Static GitHub Pages deployment via GitHub Actions.
