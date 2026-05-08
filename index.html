@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CS2 Steam Profile Tabs</title>
+    <title>CS2 Steam Profile Stats</title>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
@@ -16,25 +16,28 @@
           name="steamInput"
           type="text"
           inputmode="url"
-          placeholder="ССЫЛКА НА ПРОФИЛЬ"
+          placeholder="Enter your Steam profile link"
           aria-describedby="statusText"
         >
       </form>
 
       <div class="tabs" role="tablist" aria-label="Сайты для проверки профиля">
-        <button class="tab is-active" id="tab-csrep" type="button" role="tab" aria-selected="true" aria-controls="sitePanel" data-site="csrep">
-          csrep.gg
-        </button>
         <button class="tab" id="tab-leetify" type="button" role="tab" aria-selected="false" aria-controls="sitePanel" data-site="leetify">
           leetify.com
         </button>
         <button class="tab" id="tab-csst" type="button" role="tab" aria-selected="false" aria-controls="sitePanel" data-site="csst">
           csst.at
         </button>
+        <button class="tab" id="tab-csrep" type="button" role="tab" aria-selected="false" aria-controls="sitePanel" data-site="csrep">
+          csrep.gg
+        </button>
+        <button class="tab" id="tab-fastgg" type="button" role="tab" aria-selected="false" aria-controls="sitePanel" data-site="fastgg">
+          fastgg.pro
+        </button>
       </div>
 
-      <section class="site-panel" id="sitePanel" role="tabpanel" aria-labelledby="tab-csrep">
-        <div class="frame-placeholder" id="framePlaceholder">содержимое сайта</div>
+      <section class="site-panel" id="sitePanel" role="tabpanel" aria-label="Встроенный просмотр выбранного сайта">
+        <div class="frame-placeholder" id="framePlaceholder">There will be rendered selected site</div>
         <iframe
           class="site-frame"
           id="siteFrame"
@@ -44,7 +47,7 @@
         ></iframe>
       </section>
 
-      <p class="status" id="statusText" role="status">Введите Steam-профиль и нажмите Enter.</p>
+      <p class="status" id="statusText" role="status">Enter your Steam profile and press Enter.</p>
     </main>
 
     <script src="script.js"></script>

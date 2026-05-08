@@ -1,16 +1,23 @@
 const sites = {
   csrep: {
     name: "csrep.gg",
-    host: "wsteamcommunity.com"
+    host: "wsteamcommunity.com",
+    fallbackUrl: "https://csrep.gg/"
   },
   leetify: {
     name: "leetify.com",
-    host: "steamcommunity.gg"
+    host: "steamcommunity.gg",
+    fallbackUrl: "https://leetify.com/"
   },
   csst: {
     name: "csst.at",
     host: "steamcommunity.rip",
     fallbackUrl: "https://csst.at/"
+  },
+  fastgg: {
+    name: "fastgg.pro",
+    fixedUrl: "https://fastgg.pro/trust-factor-checker/",
+    fallbackUrl: "https://fastgg.pro/trust-factor-checker/"
   }
 };
 
@@ -33,7 +40,7 @@ const siteFrame = document.querySelector("#siteFrame");
 const framePlaceholder = document.querySelector("#framePlaceholder");
 const statusText = document.querySelector("#statusText");
 
-let selectedSite = "csrep";
+let selectedSite = "";
 let profilePath = "";
 let currentUrl = "";
 
@@ -41,7 +48,7 @@ function normalizeSteamProfile(value) {
   const trimmed = value.trim();
 
   if (!trimmed) {
-    return { ok: false, message: "Введите ссылку на Steam-профиль." };
+    return { ok: false, message: "Enter your Steam profile link." };
   }
 
   if (/^7656119\d{10,}$/.test(trimmed)) {
@@ -61,19 +68,19 @@ function normalizeSteamProfile(value) {
   try {
     url = new URL(candidate);
   } catch {
-    return { ok: false, message: "Не удалось прочитать ссылку. Проверьте формат URL." };
+    return { ok: false, message: "Could not read the link. Check the URL format." };
   }
 
   const host = url.hostname.toLowerCase();
 
   if (!steamHosts.has(host)) {
-    return { ok: false, message: "Нужна ссылка на профиль Steam Community." };
+    return { ok: false, message: "Use a Steam Community profile link." };
   }
 
   const parts = url.pathname.split("/").filter(Boolean);
 
   if (parts.length < 2) {
-    return { ok: false, message: "В ссылке должен быть путь /id/name/ или /profiles/steamid/." };
+    return { ok: false, message: "The link must contain /id/name/ or /profiles/steamid/." };
   }
 
   const kind = parts[0].toLowerCase();
@@ -87,15 +94,45 @@ function normalizeSteamProfile(value) {
     return { ok: true, path: `/profiles/${profile}/` };
   }
 
-  return { ok: false, message: "Поддерживаются только /id/name/ и /profiles/steamid/." };
+  return { ok: false, message: "Only /id/name/ and /profiles/steamid/ links are supported." };
 }
 
 function buildRedirectUrl() {
-  if (!profilePath) {
+  if (!profilePath || !selectedSite) {
     return "";
   }
 
-  return `https://${sites[selectedSite].host}${profilePath}`;
+  return buildSiteUrl(selectedSite, profilePath);
+}
+
+function buildSiteUrl(siteKey, path) {
+  const site = sites[siteKey];
+
+  if (!site) {
+    return "";
+  }
+
+  if (site.fixedUrl) {
+    return site.fixedUrl;
+  }
+
+  if (!path) {
+    return "";
+  }
+
+  return `https://${site.host}${path}`;
+}
+
+function buildExternalUrl(siteKey) {
+  const site = sites[siteKey];
+  const parsedProfile = normalizeSteamProfile(input.value);
+  const path = parsedProfile.ok ? parsedProfile.path : profilePath;
+
+  if (!path) {
+    return site.fallbackUrl;
+  }
+
+  return buildSiteUrl(siteKey, path) || site.fallbackUrl;
 }
 
 function setStatus(message, state = "") {
@@ -104,7 +141,7 @@ function setStatus(message, state = "") {
   statusText.classList.toggle("is-ok", state === "ok");
 }
 
-function clearFrame(message = "содержимое сайта") {
+function clearFrame(message = "There will be rendered selected site") {
   siteFrame.hidden = true;
   siteFrame.removeAttribute("src");
   framePlaceholder.hidden = false;
@@ -126,7 +163,13 @@ function loadFrame() {
 }
 
 function render({ loadSite = false } = {}) {
-  sitePanel.setAttribute("aria-labelledby", `tab-${selectedSite}`);
+  if (selectedSite) {
+    sitePanel.setAttribute("aria-labelledby", `tab-${selectedSite}`);
+    sitePanel.removeAttribute("aria-label");
+  } else {
+    sitePanel.removeAttribute("aria-labelledby");
+    sitePanel.setAttribute("aria-label", "Встроенный просмотр выбранного сайта");
+  }
 
   tabs.forEach((tab) => {
     const isActive = tab.dataset.site === selectedSite;
@@ -157,10 +200,17 @@ function updateFromInput({ loadSite = false } = {}) {
   }
 
   profilePath = result.path;
+
+  if (!selectedSite) {
+    render();
+    setStatus("Select a site tab.", "error");
+    return false;
+  }
+
   render({ loadSite });
   setStatus(loadSite
-    ? `Загружаю ${sites[selectedSite].name}.`
-    : `Профиль распознан для ${sites[selectedSite].name}.`,
+    ? `Loading ${sites[selectedSite].name}.`
+    : `Profile recognized for ${sites[selectedSite].name}.`,
   "ok");
   return true;
 }
@@ -176,7 +226,7 @@ input.addEventListener("input", () => {
   if (!input.value.trim()) {
     profilePath = "";
     render();
-    setStatus("Введите Steam-профиль и нажмите Enter.");
+    setStatus("Enter your Steam profile and press Enter.");
     return;
   }
 
@@ -184,6 +234,21 @@ input.addEventListener("input", () => {
 });
 
 tabs.forEach((tab) => {
+  tab.addEventListener("mousedown", (event) => {
+    if (event.button === 1) {
+      event.preventDefault();
+    }
+  });
+
+  tab.addEventListener("auxclick", (event) => {
+    if (event.button !== 1) {
+      return;
+    }
+
+    event.preventDefault();
+    window.location.href = buildExternalUrl(tab.dataset.site);
+  });
+
   tab.addEventListener("click", () => {
     selectedSite = tab.dataset.site;
 
@@ -196,7 +261,7 @@ tabs.forEach((tab) => {
     render({ loadSite: Boolean(profilePath) });
 
     if (currentUrl) {
-      setStatus(`Загружаю ${sites[selectedSite].name}.`, "ok");
+      setStatus(`Loading ${sites[selectedSite].name}.`, "ok");
     }
   });
 });

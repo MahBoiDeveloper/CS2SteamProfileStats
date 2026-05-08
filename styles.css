@@ -10,6 +10,7 @@
   --yellow: #f2c76b;
   --red: #f36f6f;
   --cyan: #66d4e8;
+  --violet: #b78cff;
   --shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
 }
 
@@ -92,15 +93,16 @@ input {
 }
 
 .tabs {
-  display: grid;
-  grid-template-columns: 310px 416px 256px;
-  justify-content: space-between;
+  display: flex;
+  justify-content: stretch;
   align-items: start;
-  gap: 12px;
+  gap: 8px;
   margin: 0 0 8px;
 }
 
 .tab {
+  flex: 1 1 0;
+  min-width: 0;
   height: 46px;
   padding: 0 14px;
   border: 1px solid var(--line);
@@ -110,6 +112,9 @@ input {
   font-size: 16px;
   font-weight: 800;
   text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   cursor: pointer;
   transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
 }
@@ -134,6 +139,10 @@ input {
 
 .tab[data-site="csst"]::before {
   background: var(--red);
+}
+
+.tab[data-site="fastgg"]::before {
+  background: var(--violet);
 }
 
 .tab:hover {
@@ -214,8 +223,7 @@ input {
 
 @media (max-width: 860px) {
   .tabs {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
+    gap: 8px;
   }
 }
 
@@ -232,7 +240,6 @@ input {
   }
 
   .tabs {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 6px;
     margin-bottom: 6px;
   }
